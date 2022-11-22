@@ -25,6 +25,7 @@ use case.
 \examples{
 # Filter on men
 filter_by_gender(patients, 'male')
+
 # Filter on women
 filter_by_gender(patients, 'female')
 }
