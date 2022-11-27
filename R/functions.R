@@ -44,19 +44,51 @@ filter_by_gender <- function(data, gender){
 #' columns are considered the right way. This is particularly useful for Mac users, because
 #' it may happen that RStudio on Mac does not recognized such qualitative columns as categorical.
 preprocess_data <- function(patients) {
-  patients$GENDER <- as.factor(patients$GENDER)
-  patients$LUNG_CANCER <- as.factor(patients$LUNG_CANCER)
-  patients$SMOKING <- as.factor(patients$SMOKING)
-  patients$YELLOW_FINGERS <- as.factor(patients$YELLOW_FINGERS)
-  patients$ANXIETY <- as.factor(patients$ANXIETY)
-  patients$PEER_PRESSURE <- as.factor(patients$PEER_PRESSURE)
-  patients$CHRONIC.DISEASE <- as.factor(patients$CHRONIC.DISEASE)
-  patients$FATIGUE <- as.factor(patients$FATIGUE)
-  patients$ALLERGY <- as.factor(patients$ALLERGY)
-  patients$WHEEZING <- as.factor(patients$WHEEZING)
-  patients$ALCOHOL.CONSUMING <- as.factor(patients$ALCOHOL.CONSUMING)
-  patients$COUGHING <- as.factor(patients$COUGHING)
-  patients$SHORTNESS.OF.BREATH <- as.factor(patients$SHORTNESS.OF.BREATH)
-  patients$SWALLOWING.DIFFICULTY <- as.factor(patients$SWALLOWING.DIFFICULTY)
-  patients$CHEST.PAIN <- as.factor(patients$CHEST.PAIN)
+  patients <- patients |>
+                dplyr::mutate_if(is.character, as.factor) |>
+                dplyr::mutate_if(is.numeric, as.factor)
 }
+
+#' Split the data into a train and a test set, separating the class labels from the covariates.
+#' @param data A data frame containing the qualitative diagnosis elements of several patients.
+#' @param test_size A float between 0 and 1 that indicates the proportion of data to sample in the test set. Default value = 0.2.
+#' @export
+#' @return A list of 4 elements: X_train, y_train, X_test, y_test.
+#' @details
+#' This function returns a random split of the dataset into two datasets, train
+#' and test, regarding the desired test size.
+#' @examples
+#' # Using default proportions
+#' datasplit <- train_test_split(patients)
+#' X_train = datasplit[[1]]
+#' y_train = datasplit[[2]]
+#'
+#' # Using custom proportions
+#' datasplit <- train_test_split(patients, 0.3)
+#' X_train = datasplit[[1]]
+#' y_train = datasplit[[2]]
+train_test_split <- function(patients, test_size=0.2) {
+  set.seed(42)
+  sample <- sample.int(n = nrow(patients), size = floor((1-test_size)*nrow(patients)), replace = F)
+  X_train <- patients[sample, 1:15]
+  y_train <- patients[sample, 16]
+  X_test <- patients[-sample, 1:15]
+  y_test <- patients[-sample, 16]
+  return(list(X_train, y_train, X_test, y_test))
+}
+
+fit_logreg <- function(patients) {
+  1+1
+}
+
+summary_logreg <- function(model) {
+  1+1
+  #proba <- predict(logistic_regression(patients), newdata=patients, type="response")
+  #pred <- ifelse(proba<0.5, 0, 1)
+  #pred <- factor(pred)
+  #matConfusion <- table(donnees$Y, pred)
+  #matConfusion
+  #erreur <- 1 - (matConfusion[1,1] + matConfusion[2,2])/sum(matConfusion)
+  #erreur*100
+}
+

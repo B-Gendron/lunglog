@@ -2,4 +2,5 @@
 
 export(filter_by_gender)
 export(preprocess_data)
+export(train_test_split)
 importFrom(dplyr,filter)

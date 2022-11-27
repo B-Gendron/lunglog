@@ -20,6 +20,7 @@
 #'   \item{SHORTNESS.OF.BREATH}{Whether the patient has a settled shortness of breath. `YES=2`, `NO=1`.}
 #'   \item{SWALLOWING.DIFFICULTY}{Whether the patient has swallowing difficulties. `YES=2`, `NO=1`.}
 #'   \item{CHEST.PAIN}{Whether the patient experience chest pain on a regular basis. `YES=2`, `NO=1`.}
+#'   \item{LUNG_CANCER}{Whether the patient was diagnosed with lung cancer. Factor `YES` or `NO`.}
 #' }
 #' @source <https://www.kaggle.com/datasets/nancyalaswad90/lung-cancer>
 "patients"
