@@ -16,7 +16,10 @@ The pre-processed `patients` dataset
 Pre-process the `patients` dataset to assign the right type to categorical columns
 }
 \details{
-This function allows the user to pre-process the patient dataset so that the categorical
-columns are considered the right way. This is particularly useful for Mac users, because
-it may happen that RStudio on Mac does not recognized such qualitative columns as categorical.
+This function allows the user to pre-process the patient dataset so that the
+categorical columns are considered the right way. This is particularly useful
+for Mac users, because it may happen that RStudio on Mac does not recognized
+such qualitative columns as categorical.
+Also, it binarizes the outcome LUNG_CANCER and makes it categorical in order
+to prepare the fit of the logistic regression model.
 }

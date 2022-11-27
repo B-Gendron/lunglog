@@ -1,8 +1,3 @@
-#' Display a summary of the dataset provided by the user.
-#' @param data A data frame.
-get_summary <- function(data){
-  summary(data)
-}
 
 #' Filter the data by the gender of the patient
 #' @param data A data frame containing the qualitative diagnosis elements of several patients.
@@ -40,16 +35,34 @@ filter_by_gender <- function(data, gender){
 #' @export
 #' @return The pre-processed `patients` dataset
 #' @details
-#' This function allows the user to pre-process the patient dataset so that the categorical
-#' columns are considered the right way. This is particularly useful for Mac users, because
-#' it may happen that RStudio on Mac does not recognized such qualitative columns as categorical.
+#' This function allows the user to pre-process the patient dataset so that the
+#' categorical columns are considered the right way. This is particularly useful
+#' for Mac users, because it may happen that RStudio on Mac does not recognized
+#' such qualitative columns as categorical.
+#' Also, it binarizes the outcome LUNG_CANCER and makes it categorical in order
+#' to prepare the fit of the logistic regression model.
 preprocess_data <- function(patients) {
-  patients <- patients |>
-                dplyr::mutate_if(is.character, as.factor) |>
-                dplyr::mutate_if(is.numeric, as.factor)
+  patients <- dplyr::rename_with(patients, ~gsub(" ", "_", .x, fixed=TRUE)) |>
+    dplyr::mutate(LUNG_CANCER = ifelse(LUNG_CANCER=="YES", "1", "0")) |>
+    dplyr::mutate(SMOKING = ifelse(SMOKING=="1", "0", "1")) |>
+    dplyr::mutate(YELLOW_FINGERS = ifelse(YELLOW_FINGERS=="1", "0", "1")) |>
+    dplyr::mutate(ANXIETY = ifelse(ANXIETY=="1", "0", "1")) |>
+    dplyr::mutate(PEER_PRESSURE = ifelse(PEER_PRESSURE=="1", "0", "1")) |>
+    dplyr::mutate(CHRONIC_DISEASE = ifelse(CHRONIC_DISEASE=="1", "0", "1")) |>
+    dplyr::mutate(FATIGUE = ifelse(FATIGUE=="1", "0", "1")) |>
+    dplyr::mutate(SHORTNESS_OF_BREATH = ifelse(SHORTNESS_OF_BREATH=="1", "0", "1")) |>
+    dplyr::mutate(ALLERGY = ifelse(ALLERGY=="1", "0", "1")) |>
+    dplyr::mutate(WHEEZING = ifelse(WHEEZING=="1", "0", "1")) |>
+    dplyr::mutate(ALCOHOL_CONSUMING = ifelse(ALCOHOL_CONSUMING=="1", "0", "1")) |>
+    dplyr::mutate(COUGHING = ifelse(COUGHING=="1", "0", "1")) |>
+    dplyr::mutate(SWALLOWING_DIFFICULTY = ifelse(SWALLOWING_DIFFICULTY=="1", "0", "1")) |>
+    dplyr::mutate(CHEST_PAIN = ifelse(CHEST_PAIN=="1", "0", "1")) |>
+    dplyr::mutate_if(is.character, as.factor) |>
+    #dplyr::mutate_if(is.numeric, as.factor) |>
+    dplyr::mutate(AGE=as.numeric(AGE))
 }
 
-#' Split the data into a train and a test set, separating the class labels from the covariates.
+#' Split the data into a train and a test set, separating the class labels from the covariates
 #' @param data A data frame containing the qualitative diagnosis elements of several patients.
 #' @param test_size A float between 0 and 1 that indicates the proportion of data to sample in the test set. Default value = 0.2.
 #' @export

@@ -2,7 +2,7 @@
 % Please edit documentation in R/functions.R
 \name{train_test_split}
 \alias{train_test_split}
-\title{Split the data into a train and a test set, separating the class labels from the covariates.}
+\title{Split the data into a train and a test set, separating the class labels from the covariates}
 \usage{
 train_test_split(patients, test_size = 0.2)
 }
@@ -15,7 +15,7 @@ train_test_split(patients, test_size = 0.2)
 A list of 4 elements: X_train, y_train, X_test, y_test.
 }
 \description{
-Split the data into a train and a test set, separating the class labels from the covariates.
+Split the data into a train and a test set, separating the class labels from the covariates
 }
 \details{
 This function returns a random split of the dataset into two datasets, train
