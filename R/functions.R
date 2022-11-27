@@ -88,8 +88,10 @@ train_test_split <- function(patients, test_size=0.2) {
   return(list(X_train, y_train, X_test, y_test))
 }
 
-fit_logreg <- function(patients) {
-  1+1
+logreg_model <- function(patients) {
+  model <- glm(LUNG_CANCER ~ SMOKING + YELLOW_FINGERS + PEER_PRESSURE + CHRONIC_DISEASE +
+                 FATIGUE + ALLERGY + ALCOHOL_CONSUMING + COUGHING + SWALLOWING_DIFFICULTY, data=patients, family=binomial)
+  return(summary(model))
 }
 
 summary_logreg <- function(model) {
