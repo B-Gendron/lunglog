@@ -30,16 +30,15 @@ filter_by_gender <- function(data, gender){
     }
 }
 
-#' Pre-process the `patients` dataset to assign the right type to categorical columns
-#' @param data The `patients` dataset
+#' Pre-process the `patients` dataset
+#' @param data Expected to be the `patients` dataset
 #' @export
 #' @return The pre-processed `patients` dataset
 #' @details
-#' This function allows the user to pre-process the patient dataset so that the
-#' categorical columns are considered the right way. This is particularly useful
-#' for Mac users, because it may happen that RStudio on Mac does not recognized
-#' such qualitative columns as categorical.
-#' Also, it binarizes the outcome LUNG_CANCER and makes it categorical in order
+#' This function performs several pre-processing steps on the `patients` dataset:
+#' - considers categorical columns are considered the right way (useful for Max users)
+#' - change the original encoding of the variables to assign 0 to `NO` and 1 to `YES`.
+#' - binarizes the outcome LUNG_CANCER and makes it categorical in order
 #' to prepare the fit of the logistic regression model.
 preprocess_data <- function(patients) {
   patients <- dplyr::rename_with(patients, ~gsub(" ", "_", .x, fixed=TRUE)) |>
@@ -58,7 +57,6 @@ preprocess_data <- function(patients) {
     dplyr::mutate(SWALLOWING_DIFFICULTY = ifelse(SWALLOWING_DIFFICULTY=="1", "0", "1")) |>
     dplyr::mutate(CHEST_PAIN = ifelse(CHEST_PAIN=="1", "0", "1")) |>
     dplyr::mutate_if(is.character, as.factor) |>
-    #dplyr::mutate_if(is.numeric, as.factor) |>
     dplyr::mutate(AGE=as.numeric(AGE))
 }
 

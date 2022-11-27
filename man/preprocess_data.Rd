@@ -2,24 +2,23 @@
 % Please edit documentation in R/functions.R
 \name{preprocess_data}
 \alias{preprocess_data}
-\title{Pre-process the `patients` dataset to assign the right type to categorical columns}
+\title{Pre-process the `patients` dataset}
 \usage{
 preprocess_data(patients)
 }
 \arguments{
-\item{data}{The `patients` dataset}
+\item{data}{Expected to be the `patients` dataset}
 }
 \value{
 The pre-processed `patients` dataset
 }
 \description{
-Pre-process the `patients` dataset to assign the right type to categorical columns
+Pre-process the `patients` dataset
 }
 \details{
-This function allows the user to pre-process the patient dataset so that the
-categorical columns are considered the right way. This is particularly useful
-for Mac users, because it may happen that RStudio on Mac does not recognized
-such qualitative columns as categorical.
-Also, it binarizes the outcome LUNG_CANCER and makes it categorical in order
+This function performs several pre-processing steps on the `patients` dataset:
+- considers categorical columns are considered the right way (useful for Max users)
+- change the original encoding of the variables to assign 0 to `NO` and 1 to `YES`.
+- binarizes the outcome LUNG_CANCER and makes it categorical in order
 to prepare the fit of the logistic regression model.
 }
