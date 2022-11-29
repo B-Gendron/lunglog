@@ -60,48 +60,77 @@ preprocess_data <- function(patients) {
     dplyr::mutate(AGE=as.numeric(AGE))
 }
 
-#' Split the data into a train and a test set, separating the class labels from the covariates
+#' Split the data into a train and a test set
 #' @param data A data frame containing the qualitative diagnosis elements of several patients.
 #' @param test_size A float between 0 and 1 that indicates the proportion of data to sample in the test set. Default value = 0.2.
 #' @export
-#' @return A list of 4 elements: X_train, y_train, X_test, y_test.
+#' @return A list of 2 elements: data_train and data_test.
 #' @details
 #' This function returns a random split of the dataset into two datasets, train
 #' and test, regarding the desired test size.
 #' @examples
 #' # Using default proportions
-#' datasplit <- train_test_split(patients)
-#' X_train = datasplit[[1]]
-#' y_train = datasplit[[2]]
+#' split <- train_test_split(patients)
+#' train = split[[1]]
+#' test = split[[2]]
 #'
 #' # Using custom proportions
-#' datasplit <- train_test_split(patients, 0.3)
-#' X_train = datasplit[[1]]
-#' y_train = datasplit[[2]]
+#' split <- train_test_split(patients, 0.3)
+#' train = split[[1]]
+#' test = split[[2]]
 train_test_split <- function(patients, test_size=0.2) {
   set.seed(42)
   sample <- sample.int(n = nrow(patients), size = floor((1-test_size)*nrow(patients)), replace = F)
-  X_train <- patients[sample, 1:15]
-  y_train <- patients[sample, 16]
-  X_test <- patients[-sample, 1:15]
-  y_test <- patients[-sample, 16]
-  return(list(X_train, y_train, X_test, y_test))
+  data_train <- patients[sample, ]
+  data_test <- patients[-sample, ]
+  return(list(data_train, data_test))
 }
 
-logreg_model <- function(patients) {
+#' Fit a logistic regression model on the patients data set
+#' @param data A data frame containing the qualitative diagnosis elements
+#' of several patients. Typically, it can be a training dataset.
+#' @return A logistic regression model, along with the formula used in the model,
+#' The coefficient values, the degrees of freedom, the null and residual deviance
+#' and the AIC.
+#' @details
+#' The model used in the function has been selected using a backward selection
+#' on the AIC criterion.
+fit_logreg <- function(data) {
   model <- glm(LUNG_CANCER ~ SMOKING + YELLOW_FINGERS + PEER_PRESSURE + CHRONIC_DISEASE +
-                 FATIGUE + ALLERGY + ALCOHOL_CONSUMING + COUGHING + SWALLOWING_DIFFICULTY, data=patients, family=binomial)
-  return(summary(model))
+                 FATIGUE + ALLERGY + ALCOHOL_CONSUMING + COUGHING + SWALLOWING_DIFFICULTY, data=data, family=binomial)
+  return(model)
 }
 
-summary_logreg <- function(model) {
-  1+1
-  #proba <- predict(logistic_regression(patients), newdata=patients, type="response")
-  #pred <- ifelse(proba<0.5, 0, 1)
-  #pred <- factor(pred)
-  #matConfusion <- table(donnees$Y, pred)
-  #matConfusion
-  #erreur <- 1 - (matConfusion[1,1] + matConfusion[2,2])/sum(matConfusion)
-  #erreur*100
+#' Provides qualitative insights about prediction performances of the logistic
+#' regression model
+#' @param data A data frame containing the qualitative diagnosis elements of several patients.
+#' It can be either the training or the test set, depending on what kind of performances
+#' the user wants to compute.
+#' @return A list of two elements giving insights about the performances. The first
+#' one is te confusion matrix, and the second one is the error, expressed in percentages.
+#' @details
+#' The error is computed using the following formula:\eqn{\text{err} = \dfrac{TP + TN}{P + N}},
+#' where \eqn{TP} and \eqn{TN} are respectively the numbers of true positives and true
+#' negatives, and \eqn{P} and \eqn{N} are respectively the numbers of positives and
+#' negatives samples (whether they are well predicted or not).
+#' @examples
+#' # Here is a whole pipeline through the predictions performances
+#' # Load data
+#' data(patients)
+#' patients <- preprocess_data(patients)
+#' # Train-test split
+#' split <- train_test_split(patients)
+#' train <- split[[1]]
+#' test <- split[[2]]
+#' # Load model and compute the performances
+#' model <- fit_logreg(train)
+#' classification_report(model, train)
+#' classification_report(model, test)
+classification_report <- function(model, data) {
+  proba <- predict(model, newdata=data, type="response")
+  pred <- ifelse(proba<0.5, 0, 1)
+  pred <- factor(pred)
+  matConfusion <- table(data$LUNG_CANCER, pred)
+  error <- 1 - (matConfusion[1,1] + matConfusion[2,2])/sum(matConfusion)
+  return(list(matConfusion, error*100))
 }
-
