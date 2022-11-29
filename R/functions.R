@@ -1,4 +1,3 @@
-
 #' Filter the data by the gender of the patient
 #' @param data A data frame containing the qualitative diagnosis elements of several patients.
 #' @param gender The gender the user wants to filter the data on. It can be either 'male' or 'female'.
@@ -31,7 +30,7 @@ filter_by_gender <- function(data, gender){
 }
 
 #' Pre-process the `patients` dataset
-#' @param data Expected to be the `patients` dataset
+#' @param patients Expected to be the `patients` dataset
 #' @export
 #' @return The pre-processed `patients` dataset
 #' @details
@@ -81,20 +80,23 @@ preprocess_data <- function(patients) {
 #' split <- train_test_split(patients, 0.3)
 #' train = split[[1]]
 #' test = split[[2]]
-train_test_split <- function(patients, test_size=0.2) {
+train_test_split <- function(data, test_size=0.2) {
   set.seed(42)
-  sample <- sample.int(n = nrow(patients), size = floor((1-test_size)*nrow(patients)), replace = F)
-  data_train <- patients[sample, ]
-  data_test <- patients[-sample, ]
+  sample <- sample.int(n = nrow(data), size = floor((1-test_size)*nrow(data)), replace = F)
+  data_train <- data[sample, ]
+  data_test <- data[-sample, ]
   return(list(data_train, data_test))
 }
 
 #' Fit a logistic regression model on the patients data set
 #' @param data A data frame containing the qualitative diagnosis elements
 #' of several patients. Typically, it can be a training dataset.
+#' @export
 #' @return A logistic regression model, along with the formula used in the model,
 #' The coefficient values, the degrees of freedom, the null and residual deviance
 #' and the AIC.
+#' @importFrom stats binomial
+#' @importFrom stats glm
 #' @details
 #' The model used in the function has been selected using a backward selection
 #' on the AIC criterion.
@@ -106,11 +108,14 @@ fit_logreg <- function(data) {
 
 #' Provides qualitative insights about prediction performances of the logistic
 #' regression model
+#' @param model The logistic regression model
 #' @param data A data frame containing the qualitative diagnosis elements of several patients.
 #' It can be either the training or the test set, depending on what kind of performances
 #' the user wants to compute.
+#' @export
 #' @return A list of two elements giving insights about the performances. The first
 #' one is te confusion matrix, and the second one is the error, expressed in percentages.
+#' @importFrom stats predict
 #' @details
 #' The error is computed using the following formula:\eqn{\text{err} = \dfrac{TP + TN}{P + N}},
 #' where \eqn{TP} and \eqn{TN} are respectively the numbers of true positives and true
@@ -153,6 +158,8 @@ classification_report <- function(model, data) {
 #' @param coughing either 1 or 0 depending on whether the patient regularly coughs or not.
 #' @param breath either 1 or 0 depending on whether the patient has a short breath or not.
 #' @param swallow either 1 or 0 depending on whether the patient has swallowing difficulties or not.
+#' @param chest either 1 or 0 depending on whether the patient experience chest pain or not.
+#' @export
 #' @return A data frame containing all the patient information.
 #' @details
 #' The ouput dataframe is already pre-processed as it is done in the `preprocess_data()` function.
@@ -168,8 +175,10 @@ get_new_patient <- function(gender, age, smoking, fingers, anxiety, peers, chron
 #' Returns a prediction of whether a new patient has lung cancer
 #' @param model The logistic regression model
 #' @param new_patient The new patient data loaded in a data frame.
+#' @export
 #' @return A sentence giving the prediction of the outcome for this specific patient, along with
 #' the probability given by the model.
+#' @importFrom stats predict
 #' @examples
 #' # Here is a whole pipeline from the model to the prediction on a new patient:
 #' data(patients)

@@ -7,7 +7,7 @@
 preprocess_data(patients)
 }
 \arguments{
-\item{data}{Expected to be the `patients` dataset}
+\item{patients}{Expected to be the `patients` dataset}
 }
 \value{
 The pre-processed `patients` dataset

@@ -8,6 +8,8 @@ regression model}
 classification_report(model, data)
 }
 \arguments{
+\item{model}{The logistic regression model}
+
 \item{data}{A data frame containing the qualitative diagnosis elements of several patients.
 It can be either the training or the test set, depending on what kind of performances
 the user wants to compute.}

@@ -4,12 +4,12 @@
 \alias{train_test_split}
 \title{Split the data into a train and a test set}
 \usage{
-train_test_split(patients, test_size = 0.2)
+train_test_split(data, test_size = 0.2)
 }
 \arguments{
-\item{test_size}{A float between 0 and 1 that indicates the proportion of data to sample in the test set. Default value = 0.2.}
-
 \item{data}{A data frame containing the qualitative diagnosis elements of several patients.}
+
+\item{test_size}{A float between 0 and 1 that indicates the proportion of data to sample in the test set. Default value = 0.2.}
 }
 \value{
 A list of 2 elements: data_train and data_test.

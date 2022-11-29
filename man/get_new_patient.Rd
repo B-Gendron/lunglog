@@ -50,6 +50,8 @@ get_new_patient(
 \item{breath}{either 1 or 0 depending on whether the patient has a short breath or not.}
 
 \item{swallow}{either 1 or 0 depending on whether the patient has swallowing difficulties or not.}
+
+\item{chest}{either 1 or 0 depending on whether the patient experience chest pain or not.}
 }
 \value{
 A data frame containing all the patient information.
