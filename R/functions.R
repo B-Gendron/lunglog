@@ -42,7 +42,6 @@ filter_by_gender <- function(data, gender){
 #' to prepare the fit of the logistic regression model.
 preprocess_data <- function(patients) {
   patients <- dplyr::rename_with(patients, ~gsub(" ", "_", .x, fixed=TRUE)) |>
-    dplyr::mutate(LUNG_CANCER = ifelse(LUNG_CANCER=="YES", "1", "0")) |>
     dplyr::mutate(SMOKING = ifelse(SMOKING=="1", "0", "1")) |>
     dplyr::mutate(YELLOW_FINGERS = ifelse(YELLOW_FINGERS=="1", "0", "1")) |>
     dplyr::mutate(ANXIETY = ifelse(ANXIETY=="1", "0", "1")) |>
@@ -58,6 +57,10 @@ preprocess_data <- function(patients) {
     dplyr::mutate(CHEST_PAIN = ifelse(CHEST_PAIN=="1", "0", "1")) |>
     dplyr::mutate_if(is.character, as.factor) |>
     dplyr::mutate(AGE=as.numeric(AGE))
+  if (dim(patients)[2]==16) {
+    patients |> dplyr::mutate(LUNG_CANCER = ifelse(LUNG_CANCER=="YES", "1", "0"))
+  }
+  return(patients)
 }
 
 #' Split the data into a train and a test set
@@ -133,4 +136,31 @@ classification_report <- function(model, data) {
   matConfusion <- table(data$LUNG_CANCER, pred)
   error <- 1 - (matConfusion[1,1] + matConfusion[2,2])/sum(matConfusion)
   return(list(matConfusion, error*100))
+}
+
+#' Loads a new patient data in a data frame
+#' @param gender either 'F' or 'M' for female or male
+#' @param age an integer giving the age of the patient
+#' @param smoking either 1 or 0 depending on whether the patient regularly smokes or not.
+#' @param fingers either 1 or 0 depending on whether the patient has yellow fingers or not.
+#' @param anxiety either 1 or 0 depending on whether the patient experiences anxiety or not.
+#' @param peers either 1 or 0 depending on whether the patient experiences peer pressure or not.
+#' @param chronic either 1 or 0 depending on whether the patient has chronic disease or not.
+#' @param fatigue either 1 or 0 depending on whether the patient experiences fatigue or not.
+#' @param allergy either 1 or 0 depending on whether the patient has allergies or not.
+#' @param wheezing either 1 or 0 depending on whether the patient regularly wheezes or not.
+#' @param alcohol either 1 or 0 depending on whether the patient has a regular alcohol consumption or not.
+#' @param coughing either 1 or 0 depending on whether the patient regularly coughs or not.
+#' @param breath either 1 or 0 depending on whether the patient has a short breath or not.
+#' @param swallow either 1 or 0 depending on whether the patient has swallowing difficulties or not.
+#' @return A data frame containing all the patient information.
+#' @details
+#' The ouput dataframe is already pre-processed with the `preprocess_data(...)` function.
+get_new_patient <- function(gender, age, smoking, fingers, anxiety, peers, chronic, fatigue, allergy, wheezing, alcohol, coughing, breath, swallow, chest) {
+  patient <- data.frame(matrix(c(gender, age, smoking, fingers, anxiety, peers, chronic, fatigue, allergy, wheezing, alcohol, coughing, breath, swallow, chest),ncol=15,byrow=T))
+  names(patient) <- names(patients)[1:15]
+  # some preprocessing
+  patient |> dplyr::mutate(AGE=as.numeric(AGE)) |>
+    dplyr::mutate_if(is.character, as.factor)
+  return(patient)
 }
