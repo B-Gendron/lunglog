@@ -155,7 +155,7 @@ classification_report <- function(model, data) {
 #' @param swallow either 1 or 0 depending on whether the patient has swallowing difficulties or not.
 #' @return A data frame containing all the patient information.
 #' @details
-#' The ouput dataframe is already pre-processed with the `preprocess_data(...)` function.
+#' The ouput dataframe is already pre-processed as it is done in the `preprocess_data()` function.
 get_new_patient <- function(gender, age, smoking, fingers, anxiety, peers, chronic, fatigue, allergy, wheezing, alcohol, coughing, breath, swallow, chest) {
   patient <- data.frame(matrix(c(gender, age, smoking, fingers, anxiety, peers, chronic, fatigue, allergy, wheezing, alcohol, coughing, breath, swallow, chest),ncol=15,byrow=T))
   names(patient) <- names(patients)[1:15]
@@ -163,4 +163,30 @@ get_new_patient <- function(gender, age, smoking, fingers, anxiety, peers, chron
   patient |> dplyr::mutate(AGE=as.numeric(AGE)) |>
     dplyr::mutate_if(is.character, as.factor)
   return(patient)
+}
+
+#' Returns a prediction of whether a new patient has lung cancer
+#' @param model The logistic regression model
+#' @param new_patient The new patient data loaded in a data frame.
+#' @return A sentence giving the prediction of the outcome for this specific patient, along with
+#' the probability given by the model.
+#' @examples
+#' # Here is a whole pipeline from the model to the prediction on a new patient:
+#' data(patients)
+#' patients <- preprocess_data(patients)
+#' model <- fit_logreg(patients)
+#' new_patient <- get_new_patient('F', 24, 0, 1, 1, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1)
+#' outcome(model, new_patient)
+outcome <- function(model, new_patient) {
+  proba <- predict(model, newdata=new_patient, type="response")
+  pred <- ifelse(proba<0.5, 0, 1)
+  pred <- factor(pred)
+  visualPred <- ""
+  if (pred==1){
+    visualPred <- "positive"
+  }
+  else {
+    visualPred <- "negative"
+  }
+  print(paste("The predicted outcome for lung cancer condition is ", visualPred, ", with a probability of ", round(proba, 3), sep=""))
 }

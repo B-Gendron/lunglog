@@ -58,5 +58,5 @@ A data frame containing all the patient information.
 Loads a new patient data in a data frame
 }
 \details{
-The ouput dataframe is already pre-processed with the `preprocess_data(...)` function.
+The ouput dataframe is already pre-processed as it is done in the `preprocess_data()` function.
 }
