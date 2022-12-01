@@ -165,7 +165,7 @@ classification_report <- function(model, data) {
 #' The ouput dataframe is already pre-processed as it is done in the `preprocess_data()` function.
 get_new_patient <- function(gender, age, smoking, fingers, anxiety, peers, chronic, fatigue, allergy, wheezing, alcohol, coughing, breath, swallow, chest) {
   patient <- data.frame(matrix(c(gender, age, smoking, fingers, anxiety, peers, chronic, fatigue, allergy, wheezing, alcohol, coughing, breath, swallow, chest),ncol=15,byrow=T))
-  names(patient) <- names(patients)[1:15]
+  names(patient) <- names(preprocess_data(patients))[1:15]
   # some preprocessing
   patient |> dplyr::mutate(AGE=as.numeric(AGE)) |>
     dplyr::mutate_if(is.character, as.factor)
