@@ -215,7 +215,7 @@ convert2binary <- function(response) {
 }
 
 #' Convert "male" or "female" input into a letter.
-#' @param response The response being either "male" or "female", with or without
+#' @param gender The response being either "male" or "female", with or without
 #' a capital letter.
 #' @export
 #' @return Either 'F' or 'M'
