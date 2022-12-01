@@ -7,7 +7,8 @@
 convert2binary(response)
 }
 \arguments{
-\item{response}{The response being either "yes" or "no".}
+\item{response}{The response being either "yes" or "no", with or without a
+capital letter.}
 }
 \value{
 Either 0 or 1
