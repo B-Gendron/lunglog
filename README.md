@@ -4,5 +4,5 @@ This R package contains a dataset with qualitative insights of several patients 
 To install the package, make sure that you have the `devtools` library loaded in your R environment, then use the following line:
 
 ```r
-devtools::install_github("B-Gendron/lunglog", ref='fd3f57f681830baf60a20bdb2992fe87b7c87fb0')
+devtools::install_github("B-Gendron/lunglog", ref='e23f7b8dfcea7a11334e6cb6c378f20b9f5a11e8')
 ``` 
