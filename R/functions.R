@@ -201,7 +201,8 @@ outcome <- function(model, new_patient) {
 }
 
 #' Convert "yes" or "no" input to a binary input.
-#' @param response The response being either "yes" or "no".
+#' @param response The response being either "yes" or "no", with or without a
+#' capital letter.
 #' @export
 #' @return Either 0 or 1
 convert2binary <- function(response) {
@@ -210,5 +211,19 @@ convert2binary <- function(response) {
   }
   if (response=="no" | response=="No") {
     return(0)
+  }
+}
+
+#' Convert "male" or "female" input into a letter.
+#' @param response The response being either "male" or "female", with or without
+#' a capital letter.
+#' @export
+#' @return Either 'F' or 'M'
+gender2letter <- function(gender) {
+  if (gender=="male" | gender=="Male") {
+    return('M')
+  }
+  if (gender=="female" | gender=="Female") {
+    return('F')
   }
 }
