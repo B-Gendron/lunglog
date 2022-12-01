@@ -199,3 +199,16 @@ outcome <- function(model, new_patient) {
   }
   print(paste("The predicted outcome for lung cancer condition is ", visualPred, ", with a probability of ", round(proba, 3), sep=""))
 }
+
+#' Convert "yes" or "no" input to a binary input.
+#' @param response The response being either "yes" or "no".
+#' @export
+#' @return Either 0 or 1
+convert2binary <- function(response) {
+  if (response=="yes" | response=="Yes") {
+    return(1)
+  }
+  if (response=="no" | response=="No") {
+    return(0)
+  }
+}
