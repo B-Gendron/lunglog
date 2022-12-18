@@ -193,11 +193,12 @@ outcome <- function(model, new_patient) {
   visualPred <- ""
   if (pred==1){
     visualPred <- "positive"
+    print(paste("The predicted outcome for lung cancer condition is ", visualPred, ", with a probability of ", round(proba, 3), sep=""))
   }
   else {
     visualPred <- "negative"
+    print(paste("The predicted outcome for lung cancer condition is ", visualPred, ", with a probability of ", round(1-proba, 3), sep=""))
   }
-  print(paste("The predicted outcome for lung cancer condition is ", visualPred, ", with a probability of ", round(proba, 3), sep=""))
 }
 
 #' Convert "yes" or "no" input to a binary input.
